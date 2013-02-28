@@ -9,7 +9,7 @@ package net.yusukezzz.android.helloscala
  */
 class IrcHost(val hostname: String, val port: Int, val pass: String, val nick: String, val login: String,
               val real: String, val charset: String) {
-  var conn: IrcConnection
+  var conn: IrcConnection = null
   val channel: String = "#DwTech2010"
 
   def connection: IrcConnection = {
