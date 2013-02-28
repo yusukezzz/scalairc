@@ -1,0 +1,4 @@
+[0m[[0mdebug[0m] [0m/Users/g0632198/android/android-sdk-mac_x86/platform-tools/adb -d install -r  /Users/g0632198/android/project/helloscala/target/helloscala-0.1.apk[0m
+[0m[[0minfo[0m] [0m	pkg: /data/local/tmp/helloscala-0.1.apk[0m
+[0m[[0minfo[0m] [0mSuccess[0m
+[0m[[0minfo[0m] [0m1642 KB/s (177005 bytes in 0.105s)[0m

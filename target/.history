@@ -1,0 +1,11 @@
+gen-idea
+android:package-debug
+android:install-device
+exit
+android:install-device
+android:generate-typed-resources
+android:clean-apk
+android:generate-typed-resources
+android:resource-managed
+compile
+exit

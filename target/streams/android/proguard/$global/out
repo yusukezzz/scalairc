@@ -1,0 +1,30 @@
+[0m[[0mdebug[0m] [0mexecuting proguard: -injars[0m
+[0m[[0mdebug[0m] [0m"/Users/g0632198/android/project/helloscala/target/scala-2.9.2/classes":"/Users/g0632198/.sbt/boot/scala-2.9.2/lib/scala-library.jar"(!META-INF/MANIFEST.MF,!**/R.class,!**/R$*.class,!**/TR.class,!**/TR$.class,!**/library.properties)[0m
+[0m[[0mdebug[0m] [0m-outjars[0m
+[0m[[0mdebug[0m] [0m"/Users/g0632198/android/project/helloscala/target/classes.min.jar"[0m
+[0m[[0mdebug[0m] [0m-libraryjars[0m
+[0m[[0mdebug[0m] [0m"/Users/g0632198/android/android-sdk-mac_x86/platforms/android-10/android.jar"[0m
+[0m[[0mdebug[0m] [0m-dontoptimize[0m
+[0m[[0mdebug[0m] [0m-dontwarn[0m
+[0m[[0mdebug[0m] [0m-dontobfuscate[0m
+[0m[[0mdebug[0m] [0m-dontnote scala.Enumeration[0m
+[0m[[0mdebug[0m] [0m-dontnote org.xml.sax.EntityResolver[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.app.Activity[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.app.Service[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.app.backup.BackupAgent[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.appwidget.AppWidgetProvider[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.content.BroadcastReceiver[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.content.ContentProvider[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.view.View[0m
+[0m[[0mdebug[0m] [0m-keep public class * extends android.app.Application[0m
+[0m[[0mdebug[0m] [0m-keep public class net.yusukezzz.android.helloscala.** { public protected *; }[0m
+[0m[[0mdebug[0m] [0m-keep public class * implements junit.framework.Test { public void test*(); }[0m
+[0m[[0mdebug[0m] [0m[0m
+[0m[[0mdebug[0m] [0m                  -keepclassmembers class * implements java.io.Serializable {[0m
+[0m[[0mdebug[0m] [0m                    private static final java.io.ObjectStreamField[] serialPersistentFields;[0m
+[0m[[0mdebug[0m] [0m                    private void writeObject(java.io.ObjectOutputStream);[0m
+[0m[[0mdebug[0m] [0m                    private void readObject(java.io.ObjectInputStream);[0m
+[0m[[0mdebug[0m] [0m                    java.lang.Object writeReplace();[0m
+[0m[[0mdebug[0m] [0m                    java.lang.Object readResolve();[0m
+[0m[[0mdebug[0m] [0m                   }[0m
+[0m[[0mdebug[0m] [0m                   [0m

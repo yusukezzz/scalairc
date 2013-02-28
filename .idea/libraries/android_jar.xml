@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="android.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../android-sdk-mac_x86/platforms/android-10/android.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../../android-sdk-mac_x86/docs/reference" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
