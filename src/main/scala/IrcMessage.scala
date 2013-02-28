@@ -59,8 +59,9 @@ object IrcMessage {
     if (m.find()) {
       try {
         msg = new IrcMessage(m.group(2), m.group(3), m.group(4), m.group(8))
-      } catch (IllegalStateException e) {
-        msg = new IrcMessage("", "", "", "")
+      } catch {
+        case _: IllegalStateException =>
+          msg = new IrcMessage("", "", "", "")
       }
     }
     msg
