@@ -4,3 +4,5 @@ target
 .idea
 .idea_modules
 *.stackdump
+*.iml
+gen/
