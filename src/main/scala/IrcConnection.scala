@@ -14,8 +14,8 @@ class IrcConnection(val host:IrcHost) extends Thread {
   var receive:String = ""
   var running:Boolean = false
   var socket:Socket = null
-  var bw:BufferedWriter
-  var br:BufferedReader
+  var bw:BufferedWriter = null
+  var br:BufferedReader = null
 
   def connect {
     socket = new Socket(host.hostname, host.port)
