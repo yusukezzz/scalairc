@@ -31,13 +31,13 @@ class MainActivity extends Activity with TypedActivity {
 
     val looper: Runnable = new Runnable {
       def run() {
-        host.connection.getReceive
+        val text = host.connection.receive
+        appendText(text)
       }
     }
   }
 
   def appendText(text: String) {
-    val tmp: String = findView(TR.textview).getText.toString
-    findView(TR.textview).setText(tmp + "\n" + text)
+    findView(TR.textview).setText(text)
   }
 }

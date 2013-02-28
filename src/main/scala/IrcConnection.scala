@@ -60,7 +60,7 @@ class IrcConnection(val host:IrcHost) extends Thread {
     if (cmd.equalsIgnoreCase("PRIVMSG")) {
       val user = m.getUser
       val text = user.nick + " " + m.trailing
-      // addMsg
+      receive += text
     } else if (cmd.equalsIgnoreCase("PING")) {
       val ping = m.trailing
       pong(ping)
