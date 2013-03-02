@@ -10,11 +10,14 @@ package net.yusukezzz.android.helloscala
 class IrcHost(val hostname: String, val port: Int, val pass: String, val nick: String, val login: String,
               val real: String, val charset: String) {
   var conn: IrcConnection = null
-  val channel: String = "#DwTech2010"
+  val channel: String = "#scalairc_test"
 
   def connection: IrcConnection = {
     if (conn == null) {
-      conn.connect
+      MainActivity.localService match {
+        case Some(service) => conn = service.addHost(this)
+        case None => throw new Exception("Invalid service connection!")
+      }
     }
     conn
   }

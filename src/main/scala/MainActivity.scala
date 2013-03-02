@@ -1,43 +1,63 @@
 package net.yusukezzz.android.helloscala
 
 import _root_.android.app.Activity
-import android.os.{Handler, IBinder, Bundle}
+import android.os.{StrictMode, Handler, IBinder, Bundle}
 import android.content.{Context, Intent, ComponentName, ServiceConnection}
+import android.util.Log
 
 class MainActivity extends Activity with TypedActivity {
-  var mIsBind: Boolean = false
-  var localService:Option[IrcConnectionService] = None
-  val host: IrcHost = new IrcHost("freenode", 6667, "", "androzzz", "androzzz", "yusukezzz", "UTF-8")
+  val host: IrcHost = new IrcHost("chat.freenode.net", 6667, "", "androzzz", "androzzz", "yusukezzz", "UTF-8")
   val handler: Handler = new Handler()
+
+  var mIsBind: Boolean = false
   val mServConn: ServiceConnection = new ServiceConnection {
     def onServiceDisconnected(name: ComponentName) {
-      localService = null
+      MainActivity.localService = None
       mIsBind = false
+      Log.d("IRC", "service disconnected")
     }
     def onServiceConnected(name: ComponentName, binder: IBinder) {
-      localService = Some(binder.asInstanceOf[IrcConnectionService#IrcConnectionBinder].getService)
+      MainActivity.localService = Some(binder.asInstanceOf[IrcConnectionService#IrcConnectionBinder].getService)
       mIsBind = true
+      Log.d("IRC", "service connected")
     }
   }
 
   override def onCreate(bundle: Bundle) {
+    // android 3.0 以降でデフォルト有効になっているStrictModeを無効化する
+    // StrictMode は本来、メインスレッド内でのネットワーク接続等パフォーマンスに悪影響がある行為を叱ってくれるもの
+    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
     super.onCreate(bundle)
     setContentView(R.layout.main)
 
-    findView(TR.textview).setText("hello, world!")
-    if (mIsBind == false) {
-      bindService(new Intent(this, classOf[IrcConnectionService]), mServConn, Context.BIND_AUTO_CREATE)
-    }
+    val str = "irc server connecting..."
+    findView(TR.textview).setText(str)
+    bindService(new Intent(this, classOf[IrcConnectionService]), mServConn, Context.BIND_AUTO_CREATE)
+  }
 
-    val looper: Runnable = new Runnable {
-      def run() {
-        val text = host.connection.receive
-        appendText(text)
+  override def onStart() {
+    super.onStart()
+    try{
+      val looper = new Runnable {
+        override def run() {
+          val text = host.connection.receive
+          appendText(text)
+          handler.postDelayed(this, 1000)
+        }
       }
+      handler.postDelayed(looper, 5000)
+      Log.d("IRC", "looper first posted")
+    } catch {
+      case e:Exception => findView(TR.textview).setText(e.getMessage)
     }
   }
 
   def appendText(text: String) {
+    // FIXME
     findView(TR.textview).setText(text)
   }
+}
+
+object MainActivity {
+  var localService:Option[IrcConnectionService] = None
 }

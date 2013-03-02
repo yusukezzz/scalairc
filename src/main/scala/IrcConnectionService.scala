@@ -3,6 +3,8 @@ package net.yusukezzz.android.helloscala
 import android.app.Service
 import android.content.Intent
 import android.os.{Binder, IBinder}
+import collection.immutable.HashMap
+import android.util.Log
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,9 +14,17 @@ import android.os.{Binder, IBinder}
  * To change this template use File | Settings | File Templates.
  */
 class IrcConnectionService extends Service {
+  var conns = new HashMap[String, IrcConnection]
   class IrcConnectionBinder extends Binder {
     def getService = IrcConnectionService.this
   }
-  val mBinder: IBinder = new IrcConnectionBinder
+  lazy val mBinder: IBinder = new IrcConnectionBinder
   override def onBind(intent: Intent): IBinder = mBinder
+
+  def addHost(host: IrcHost): IrcConnection = {
+    val conn = new IrcConnection(host)
+    conn.connect()
+    conns += (host.hostname -> conn)
+    conn
+  }
 }

@@ -1,7 +1,8 @@
 package net.yusukezzz.android.helloscala
 
 import java.io.{InputStreamReader, OutputStreamWriter, BufferedReader, BufferedWriter}
-import java.net.Socket
+import java.net.{InetAddress, Socket}
+import android.util.Log
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,28 +18,38 @@ class IrcConnection(val host:IrcHost) extends Thread {
   var bw:BufferedWriter = null
   var br:BufferedReader = null
 
-  def connect {
+  def connect() {
+    // FIXME: use another thread (like AsyncTask)
+    Log.d("IRC", "socket connecting")
     socket = new Socket(host.hostname, host.port)
-    bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))
-    br = new BufferedReader(new InputStreamReader(socket.getInputStream(),host.charset))
+    Log.d("IRC", "socket connected")
+    bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream))
+    br = new BufferedReader(new InputStreamReader(socket.getInputStream,host.charset))
+    Log.d("IRC", "reader/writer initialized")
     running = true
     this.start()
-    this.nick
+    Log.d("IRC", "thread started")
+    this.nick(host.nick)
+    Log.d("IRC", "irc nick sended")
+    this.user()
+    Log.d("IRC", "irc user registered")
+    this.joinCh(host.channel)
+    Log.d("IRC", "irc channel joined: " + host.channel)
   }
 
-  override def run {
+  override def run() {
     var current: String = null
     while(!isInterrupted) {
       current = br.readLine()
       if (current != null) {
         this.dispatch(current)
       } else {
-        this.close
+        this.close()
       }
     }
   }
 
-  def close = synchronized {
+  def close() = synchronized {
     if (isInterrupted == false) {
       interrupt()
     }
@@ -59,7 +70,7 @@ class IrcConnection(val host:IrcHost) extends Thread {
     val cmd = m.command
     if (cmd.equalsIgnoreCase("PRIVMSG")) {
       val user = m.getUser
-      val text = user.nick + " " + m.trailing
+      val text = user.nick + " " + m.trailing + "\n"
       receive += text
     } else if (cmd.equalsIgnoreCase("PING")) {
       val ping = m.trailing
@@ -67,23 +78,36 @@ class IrcConnection(val host:IrcHost) extends Thread {
       if (!running) {
         running = true
       }
+    } else {
+      //receive += m.trailing + "\n"
     }
   }
 
   def write(cmd: String) {
     bw.write(cmd + "\n")
     bw.flush()
+    Log.d("IRC", "send cmd: " + cmd)
   }
 
-  def joinCh {
-    this.write("JOIN " + host.channel)
+  def joinCh(channel: String) {
+    this.write("JOIN " + channel)
   }
 
-  def nick {
-    this.write("NICK " + host.nick)
+  def nick(name: String) {
+    this.write("NICK " + name)
   }
 
   def pong(daemon: String) {
     this.write("PONG " + daemon)
+  }
+
+  def user() {
+    var hostname = ""
+    try {
+      hostname = InetAddress.getLocalHost.getHostName
+    } catch {
+      case _ => Log.d("IRC", "hostname unresolved")
+    }
+    this.write("USER " + host.login + " " + hostname + " " + host.hostname + " :" + host.real)
   }
 }
