@@ -12,7 +12,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service android:name=".IrcConnectionService" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-sdk android:minSdkVersion="10"/>
 </manifest>
