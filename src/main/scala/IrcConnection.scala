@@ -19,7 +19,7 @@ class IrcConnection(val host:IrcHost) extends Thread {
   var br:BufferedReader = null
 
   def connect() {
-    // FIXME: use another thread (like AsyncTask)
+    // FIXME: use another process (like AsyncTask)
     Log.d("IRC", "socket connecting")
     socket = new Socket(host.hostname, host.port)
     Log.d("IRC", "socket connected")
