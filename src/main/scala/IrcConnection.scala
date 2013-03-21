@@ -3,6 +3,7 @@ package net.yusukezzz.android.helloscala
 import java.io.{InputStreamReader, OutputStreamWriter, BufferedReader, BufferedWriter}
 import java.net.{InetAddress, Socket}
 import android.util.Log
+import collection.immutable.HashMap
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,7 @@ class IrcConnection(val host:IrcHost) extends Thread {
   var socket:Socket = null
   var bw:BufferedWriter = null
   var br:BufferedReader = null
+  var channels = new HashMap[String, IrcChannel]
 
   def connect() {
     // FIXME: use another process (like AsyncTask)
@@ -89,8 +91,16 @@ class IrcConnection(val host:IrcHost) extends Thread {
     Log.d("IRC", "send cmd: " + cmd)
   }
 
-  def joinCh(channel: String) {
-    this.write("JOIN " + channel)
+  def joinCh(ch_name: String):IrcChannel = {
+    channels.get(ch_name) match {
+      case Some(ch) => ch
+      case None => {
+        this.write("JOIN " + ch_name)
+        val c = new IrcChannel(ch_name)
+        channels += (ch_name -> c)
+        c
+      }
+    }
   }
 
   def nick(name: String) {
