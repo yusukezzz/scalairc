@@ -1,3 +1,5 @@
+package net.yusukezzz.android.helloscala
+
 import java.util
 import net.yusukezzz.android.helloscala.IrcUser
 
