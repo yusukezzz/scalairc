@@ -42,11 +42,15 @@ class IrcConnection(val host:IrcHost) extends Thread {
   override def run() {
     var current: String = null
     while(!isInterrupted) {
-      current = br.readLine()
-      if (current != null) {
-        this.dispatch(current)
-      } else {
-        this.close()
+      try {
+        current = br.readLine()
+        if (current != null) {
+          this.dispatch(current)
+        } else {
+          this.close()
+        }
+      } catch {
+        case e => receive += e.getMessage
       }
     }
   }
@@ -65,15 +69,19 @@ class IrcConnection(val host:IrcHost) extends Thread {
   }
 
   def dispatch(msg: String) {
+    Log.d("IRC", "msg=" + msg)
     val m: IrcMessage = IrcMessage.parse(msg)
     if (m == null) {
+      Log.d("IRC", "unrecognize msg=" + msg)
       return
     }
     val cmd = m.command
+    Log.d("IRC", "cmd=" + cmd)
     if (cmd.equalsIgnoreCase("PRIVMSG")) {
       val user = m.getUser
-      val text = user.nick + " " + m.trailing + "\n"
+      val text = user.nick + ": " + m.trailing + "\n"
       receive += text
+      Log.d("IRC", "PRIVMSG" + text)
     } else if (cmd.equalsIgnoreCase("PING")) {
       val ping = m.trailing
       pong(ping)
