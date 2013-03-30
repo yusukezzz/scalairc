@@ -51,7 +51,7 @@ class IrcMessage(val prefix: String, val command: String, val middle: String, va
 }
 
 object IrcMessage {
-  val MES_REGEXP: String = "^(:([\\w!@~\\.]+?)\\x20)?(\\w+|\\d{3})((\\x20([^\\x00\\x20\\n:]+))*)?(\\x20:([^\\x00\\n]+))?"
+  val MES_REGEXP: String = "^(:([\\w!@~\\.~-]+?)\\x20)?(\\w+|\\d{3})((\\x20([^\\x00\\x20\\n:]+))*)?(\\x20:([^\\x00\\n]+))?"
 
   def parse(str: String): IrcMessage = {
     var msg: IrcMessage = null
