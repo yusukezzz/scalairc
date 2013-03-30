@@ -31,7 +31,7 @@ class MainActivity extends Activity with TypedActivity {
     setContentView(R.layout.main)
 
     val str = "irc server connecting..."
-    findView(TR.textview).setText(str)
+    findView(TR.received_text).setText(str)
     bindService(new Intent(this, classOf[IrcConnectionService]), mServConn, Context.BIND_AUTO_CREATE)
   }
 
@@ -42,19 +42,21 @@ class MainActivity extends Activity with TypedActivity {
         override def run() {
           val text = host.connection.receive
           appendText(text)
+          host.connection.receive = ""
           handler.postDelayed(this, 1000)
         }
       }
       handler.postDelayed(looper, 5000)
       Log.d("IRC", "looper first posted")
     } catch {
-      case e:Exception => findView(TR.textview).setText(e.getMessage)
+      case e => findView(TR.received_text).setText(e.getMessage)
     }
   }
 
   def appendText(text: String) {
     // FIXME
-    findView(TR.textview).setText(text)
+    val tmp = findView(TR.received_text).getText()
+    findView(TR.received_text).setText(tmp + "\r" + text)
   }
 }
 
