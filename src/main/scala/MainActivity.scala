@@ -4,6 +4,9 @@ import _root_.android.app.Activity
 import android.os.{StrictMode, Handler, IBinder, Bundle}
 import android.content.{Context, Intent, ComponentName, ServiceConnection}
 import android.util.Log
+import android.view.View.OnClickListener
+import android.view.View
+import android.widget.EditText
 
 class MainActivity extends Activity with TypedActivity {
   val host: IrcHost = new IrcHost("chat.freenode.net", 6667, "", "androzzz", "androzzz", "yusukezzz", "UTF-8")
@@ -26,7 +29,7 @@ class MainActivity extends Activity with TypedActivity {
   override def onCreate(bundle: Bundle) {
     // android 3.0 以降でデフォルト有効になっているStrictModeを無効化する
     // StrictMode は本来、メインスレッド内でのネットワーク接続等パフォーマンスに悪影響がある行為を叱ってくれるもの
-    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build())
     super.onCreate(bundle)
     setContentView(R.layout.main)
 
@@ -48,6 +51,16 @@ class MainActivity extends Activity with TypedActivity {
       }
       handler.postDelayed(looper, 5000)
       Log.d("IRC", "looper first posted")
+      val btn = findView(TR.post_btn)
+      btn.setOnClickListener(new OnClickListener(){
+        def onClick(v: View) {
+          val send_text = findView(TR.send_text)
+          val msg = send_text.getText.toString
+          host.connection.privmsg(host.channel, msg)
+          send_text.setText("")
+          send_text.requestFocus()
+        }
+      })
     } catch {
       case e => findView(TR.received_text).setText(e.getMessage)
     }
@@ -57,6 +70,10 @@ class MainActivity extends Activity with TypedActivity {
     // FIXME
     val tmp = findView(TR.received_text).getText()
     findView(TR.received_text).setText(tmp + "\r" + text)
+  }
+
+  def setChannelName(name: String) {
+    findView(TR.channel_name).setText(name)
   }
 }
 

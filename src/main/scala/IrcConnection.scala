@@ -26,8 +26,9 @@ class IrcConnection(val host:IrcHost) extends Thread {
     socket = new Socket(host.hostname, host.port)
     Log.d("IRC", "socket connected")
     bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream))
-    br = new BufferedReader(new InputStreamReader(socket.getInputStream,host.charset))
+    br = new BufferedReader(new InputStreamReader(socket.getInputStream, host.charset))
     Log.d("IRC", "reader/writer initialized")
+    Log.d("IRC", "charset: " + host.charset)
     running = true
     this.start()
     Log.d("IRC", "thread started")
@@ -127,5 +128,10 @@ class IrcConnection(val host:IrcHost) extends Thread {
       case _ => Log.d("IRC", "hostname unresolved")
     }
     this.write("USER " + host.login + " " + hostname + " " + host.hostname + " :" + host.real)
+  }
+
+  def privmsg(ch: String, msg: String) {
+    write("PRIVMSG " + ch + " :" + msg)
+    receive += msg
   }
 }

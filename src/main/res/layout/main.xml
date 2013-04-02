@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content" android:orientation="vertical">
-
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="channel name"
-            android:id="@+id/channel_name" android:layout_gravity="center_horizontal|top"/>
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/received_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+              android:gravity="center_vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/channel" android:orientation="horizontal">
+    <LinearLayout android:layout_height="fill_parent" android:id="@+id/linearLayout1" android:orientation="vertical" android:layout_width="fill_parent" android:layout_weight="1">
+        <TextView android:textSize="20px" android:id="@+id/channel_name" android:layout_height="wrap_content" android:text="TextView" android:layout_width="fill_parent" android:textColor="#00FFFF"></TextView>
+        <ScrollView android:layout_height="fill_parent" android:id="@+id/channel_body" android:layout_width="fill_parent" android:layout_weight="1" android:fadingEdgeLength="25dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/received_text" android:text="TextView"></TextView>
+        </ScrollView>
+        <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:id="@+id/channel_bottom" android:layout_width="fill_parent">
+            <EditText android:layout_weight="1" android:layout_height="wrap_content" android:id="@+id/send_text" android:clickable="true" android:layout_width="wrap_content" android:inputType="text"></EditText>
+            <Button android:layout_weight="0" android:text="@string/send" android:layout_height="wrap_content" android:id="@+id/post_btn" android:layout_width="wrap_content"></Button>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
